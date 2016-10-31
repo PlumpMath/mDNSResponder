@@ -18,7 +18,7 @@
     <ClCompile Include="..\ClientCommon.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\dns-sd.c">
+    <ClCompile Include="..\dns-sd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

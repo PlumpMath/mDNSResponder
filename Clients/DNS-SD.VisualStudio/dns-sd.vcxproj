@@ -31,6 +31,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -259,7 +260,7 @@ xcopy /I/Y "$(TargetPath)"                                                      
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ClientCommon.c" />
-    <ClCompile Include="..\dns-sd.c" />
+    <ClCompile Include="..\dns-sd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ClientCommon.h" />

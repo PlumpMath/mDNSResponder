@@ -3,10 +3,10 @@
 
 #include "stdafx.h"
 
-extern "C"
-{
-	int oldMain(int argc, char **argv);
-}
+//extern "C"
+//{
+_declspec(dllimport)	int oldMain(int argc, char **argv);
+//}
 
 
 int main(int argc, char **argv)
