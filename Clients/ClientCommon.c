@@ -42,8 +42,7 @@
 #include <stdio.h>			// For stdout, stderr
 
 #include "ClientCommon.h"
-
-const char *GetNextLabel(const char *cstr, char label[64])
+ const char *GetNextLabel(const char *cstr, char label[64])
 	{
 	char *ptr = label;
 	while (*cstr && *cstr != '.')				// While we have characters in the label...
