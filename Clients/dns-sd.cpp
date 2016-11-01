@@ -86,16 +86,34 @@ cl dns-sd.c -I../mDNSShared -DNOT_HAVE_GETOPT ws2_32.lib ..\mDNSWindows\DLL\Rele
 #include <time.h>
 #include <sys/types.h>		// For u_char
 #include <map>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
-std::map<string, string> g_resolveMap;
+std::thread g_t1;
 
-__declspec(dllexport) bool getResolution(string name, string &ip)
+
+std::map<string, string> g_resolveMap;
+int callDNSSDWithCL(int argc, char **argv);
+
+void call_from_thread(int argc, char **argv)
 {
+	callDNSSDWithCL(argc, argv);
+	//std::cout << "Hello, World" << std::endl;
+
+
+}
+
+extern "C"
+__declspec(dllexport) bool getResolution(char * name, char * ip)
+{
+	string s;
+
 	try
 	{
-		ip=g_resolveMap[name];
+		s=g_resolveMap[name];
+		strcpy(ip, s.c_str());
 		return true;
 	}
 	catch (const std::exception&)
@@ -252,6 +270,11 @@ dispatch_source_t timer_source;
 
 static volatile int stopNow = 0;
 static volatile int timeOut = LONG_TIME;
+
+__declspec(dllexport) void stopDNS()
+{
+	stopNow = 1;
+}
 
 #if _DNS_SD_LIBDISPATCH
 #define EXIT_IF_LIBDISPATCH_FATAL_ERROR(E) \
@@ -879,6 +902,7 @@ static void HandleEvents(void)
 
 	while (!stopNow)
 		{
+		
 		// 1. Set up the fd_set as usual here.
 		// This example client has no file descriptors of its own,
 		// but a real application would call FD_SET to add them to the set here
@@ -1051,9 +1075,13 @@ static char *gettype(char *buffer, char *typ)
 	return(typ);
 	}
 
+extern "C"
+__declspec(dllexport) void runDNSSDFromThread(int argc, char **argv)
+{
+	 g_t1 = std::thread(call_from_thread, argc, argv);
+}
 
-
-__declspec(dllexport) int oldMain(int argc, char **argv)
+int callDNSSDWithCL(int argc, char **argv)
 	{
 	DNSServiceErrorType err;
 	char buffer[TypeBufferSize], *typ, *dom;
